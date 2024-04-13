@@ -18,7 +18,7 @@ export const Home = () => {
         }, 2000);
 
         // Making No. of request to server in chunk of 5 otp per request
-        
+
         let totalReqToBeMade = Math.floor(data.total / 5);
         const reqLessThan5 = data.total % 5;
         if (reqLessThan5 != 0) await executionBlock(reqLessThan5, intervalId);
@@ -87,7 +87,7 @@ export const Home = () => {
                         placeholder="No. of Messages to send"
                         disabled={loading}
                         max={50}
-                        min={5}
+                        min={1}
                         onChange={(e) => {
                             setData({
                                 ...data,
