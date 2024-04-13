@@ -1,8 +1,8 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { ClipLoader } from "react-spinners";
+import axios from "axios";
 export const Home = () => {
-    function onSubmit(e) {
+    async function onSubmit(e) {
         e.preventDefault();
         setLoading(true);
         const perInc = 100 / data.total;
@@ -16,41 +16,34 @@ export const Home = () => {
                 }
             });
         }, 2000);
-        let totalReqToBeMade = Math.ceil(data.total / 5);
-        axios
-            .post("/api/v1/bomb", { ...data, total: 5 })
-            .then(({ data }) => {
-                totalReqToBeMade--;
-            })
-            .catch(() => {
-                clearInterval(bombintervalId);
-                clearInterval(intervalId);
-                setLoading(false);
-                setProgress(0);
-            });
-        const bombintervalId = setInterval(() => {
-            if (totalReqToBeMade > 0) {
-                axios
-                    .post("/api/v1/bomb", { ...data, total: 5 })
-                    .then(({ data }) => {
-                        console.log(data);
-                    })
-                    .catch(() => {
-                        clearInterval(bombintervalId);
-                        clearInterval(intervalId);
-                        setLoading(false);
-                        setProgress(0);
-                    });
-                totalReqToBeMade--;
-            } else {
-                clearInterval(bombintervalId);
-                clearInterval(intervalId);
-                setLoading(false);
-                setProgress(0);
-            }
-        }, 10000);
-    }
 
+        // Making No. of request to server in chunk of 5 otp per request
+        
+        let totalReqToBeMade = Math.floor(data.total / 5);
+        const reqLessThan5 = data.total % 5;
+        if (reqLessThan5 != 0) await executionBlock(reqLessThan5, intervalId);
+        for (; totalReqToBeMade > 0; totalReqToBeMade--) {
+            await executionBlock(5, intervalId);
+        }
+        clearInterval(intervalId);
+        setLoading(false);
+        setProgress(0);
+    }
+    function executionBlock(total, intervalId) {
+        return new Promise((resolve, reject) => {
+            axios
+                .post("/api/v1/bomb", { ...data, total: total })
+                .then(() => {})
+                .catch(() => {
+                    clearInterval(intervalId);
+                    setProgress(0);
+                    setLoading(false);
+                });
+            setTimeout(() => {
+                resolve();
+            }, total * 2000);
+        });
+    }
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         number: "",
