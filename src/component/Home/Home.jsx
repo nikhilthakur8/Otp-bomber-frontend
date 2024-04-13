@@ -16,19 +16,41 @@ export const Home = () => {
                 }
             });
         }, 2000);
+        let totalReqToBeMade = Math.ceil(data.total / 5);
         axios
-            .post("/api/v1/bomb", data)
+            .post("/api/v1/bomb", { ...data, total: 5 })
             .then(({ data }) => {
-                console.log(data);
+                totalReqToBeMade--;
             })
             .catch(() => {
+                clearInterval(bombintervalId);
                 clearInterval(intervalId);
-                setProgress(0);
-            })
-            .finally(() => {
                 setLoading(false);
+                setProgress(0);
             });
+        const bombintervalId = setInterval(() => {
+            if (totalReqToBeMade > 0) {
+                axios
+                    .post("/api/v1/bomb", { ...data, total: 5 })
+                    .then(({ data }) => {
+                        console.log(data);
+                    })
+                    .catch(() => {
+                        clearInterval(bombintervalId);
+                        clearInterval(intervalId);
+                        setLoading(false);
+                        setProgress(0);
+                    });
+                totalReqToBeMade--;
+            } else {
+                clearInterval(bombintervalId);
+                clearInterval(intervalId);
+                setLoading(false);
+                setProgress(0);
+            }
+        }, 10000);
     }
+
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         number: "",
@@ -72,7 +94,7 @@ export const Home = () => {
                         placeholder="No. of Messages to send"
                         disabled={loading}
                         max={50}
-                        min={1}
+                        min={5}
                         onChange={(e) => {
                             setData({
                                 ...data,
@@ -85,8 +107,8 @@ export const Home = () => {
                         ⚠️ Please Don't misue this service
                     </span> */}
                     <div className="w-full leading-4 text-sm mt-5 mx-auto bg-red-600/80 px-2 py-1 text-white rounded-md">
-                        ⚠️ Please do not use this website for revenge
-                        or harassment. Developer is not responsible for your
+                        ⚠️ Please do not use this website for revenge or
+                        harassment. Developer is not responsible for your
                         actions.
                     </div>
                     {loading && (
