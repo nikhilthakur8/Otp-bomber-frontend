@@ -51,14 +51,14 @@ export const Home = () => {
     });
     const [progress, setProgress] = useState(0);
     return (
-        <div className=" font-mono text-center px-5 py-10 md:px-0">
-            <p className="text-3xl md:text-5xl lg:text-6xl font-bold">
-                Welcome to <span className="text-red-800/80">OTP Bomber</span>
+        <div className=" font-mono text-center py-10 md:px-0">
+            <p className="text-2xl md:text-5xl lg:text-6xl font-bold">
+                Welcome to <span className="text-[#E72929]">OTP Bomber</span>
             </p>
-            <p className="mt-5 text-lg md:text-2xl font-medium text-black/80">
+            <p className="mt-4 text-base md:text-2xl font-medium text-black/80">
                 Want to Prank Your Friend ?
             </p>
-            <p className="text-lg md:text-2xl my-1 font-medium text-black/80">
+            <p className="text-base md:text-2xl my-1 font-medium text-black/80">
                 You're at Right Place 💀💀
             </p>
             <div className="lg:w-1/3 md:w-1/2 w-full px-5 font-mono mx-auto">
@@ -96,9 +96,6 @@ export const Home = () => {
                         }}
                         required
                     />
-                    {/* <span className="text-sm font-semibold text-gray-700 mt-1 mx-2 mr-auto">
-                        ⚠️ Please Don't misue this service
-                    </span> */}
                     <div className="w-full leading-4 text-sm mt-5 mx-auto bg-red-600/80 px-2 py-1 text-white rounded-md">
                         ⚠️ Please do not use this website for revenge or
                         harassment. Developer is not responsible for your

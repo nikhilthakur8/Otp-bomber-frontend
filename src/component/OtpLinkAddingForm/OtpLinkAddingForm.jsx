@@ -18,15 +18,16 @@ export const OtpLinkAddingForm = () => {
         mobileNumber: null,
     });
     return (
-        <div>
-            <form
-                onSubmit={onSubmit}
-                className="flex flex-col space-y-10 mx-auto w-2/3"
-            >
+        <div className="my-14 font-mono">
+            <form onSubmit={onSubmit} className="flex flex-col mx-auto w-2/3">
+                <label htmlFor="" className="my-2">
+                    URL Link
+                </label>
                 <input
                     type="url"
                     name="url"
                     required
+                    className="rounded-md px-5 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2"
                     onChange={(e) =>
                         setData((prev) => {
                             prev.url = e.target.value;
@@ -34,10 +35,14 @@ export const OtpLinkAddingForm = () => {
                         })
                     }
                 />
+                <label htmlFor="" className="my-2">
+                    Number Key
+                </label>
                 <input
                     type="text"
                     name="numberKey"
                     required
+                    className="rounded-md px-5 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2"
                     onChange={(e) =>
                         setData((prev) => {
                             prev.numberKey = e.target.value;
@@ -45,9 +50,13 @@ export const OtpLinkAddingForm = () => {
                         })
                     }
                 />
+                <label htmlFor="" className="my-2">
+                    Mobile Number Prefix
+                </label>
                 <input
                     type="text"
                     name="mobileNumber"
+                    className="rounded-md px-5 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2"
                     onChange={(e) =>
                         setData((prev) => {
                             prev.mobileNumber = e.target.value;
@@ -55,7 +64,12 @@ export const OtpLinkAddingForm = () => {
                         })
                     }
                 />
-                <button type="submit">Submit</button>
+                <button
+                    className="bg-blue-600 mt-10 hover:bg-blue-500/60 text-white font-semibold mx-10 py-2 rounded-full"
+                    type="submit"
+                >
+                    Submit
+                </button>
             </form>
         </div>
     );
