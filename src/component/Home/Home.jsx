@@ -4,6 +4,16 @@ import axios from "axios";
 export const Home = () => {
     async function onSubmit(e) {
         e.preventDefault();
+        if (data.number.length != 10) {
+            alert("Please enter a valid mobile number");
+            return;
+        } else if (data.total <= 0) {
+            alert("Please enter the number of message > 0");
+            return;
+        } else if (data.total > 50) {
+            alert("Please enter the number of message < 50");
+            return;
+        }
         setLoading(true);
         const perInc = 100 / data.total;
         const intervalId = setInterval(() => {
@@ -25,10 +35,13 @@ export const Home = () => {
         for (; totalReqToBeMade > 0; totalReqToBeMade--) {
             await executionBlock(5, intervalId);
         }
-        clearInterval(intervalId);
-        setLoading(false);
-        setProgress(0);
+        setTimeout(() => {
+            clearInterval(intervalId);
+            setLoading(false);
+            setProgress(0);
+        }, 1000);
     }
+    const [focus, setFocus] = useState({ number: false, total: false });
     function executionBlock(total, intervalId) {
         return new Promise((resolve, reject) => {
             axios
@@ -51,7 +64,7 @@ export const Home = () => {
     });
     const [progress, setProgress] = useState(0);
     return (
-        <div className=" font-mono text-center py-10 md:px-0">
+        <div className="text-center py-10 md:px-0">
             <p className="text-2xl md:text-5xl lg:text-6xl font-bold">
                 Welcome to <span className="text-[#E72929]">OTP Bomber</span>
             </p>
@@ -63,39 +76,86 @@ export const Home = () => {
             </p>
             <div className="lg:w-1/3 md:w-1/2 w-full px-5 font-mono mx-auto">
                 <form
-                    className=" mt-10 flex flex-col items-center"
+                    className="mt-10 flex flex-col items-center"
                     onSubmit={onSubmit}
                 >
-                    <input
-                        className="flex h-12 rounded-md border w-full border-black/30 bg-transparent px-3 py-3 text-base md:text-xl text-blue-900 font-medium placeholder:text-gray-600 placeholder:text-base md:placeholder:text-xl focus:outline-none"
-                        type="tel"
-                        placeholder="Enter Mobile No. (97468XXXXX)"
-                        max={9999999999}
-                        min={1111111111}
-                        disabled={loading}
-                        onChange={(e) => {
-                            setData({
-                                ...data,
-                                number: e.target.value,
-                            });
-                        }}
-                        required
-                    />
-                    <input
-                        className="flex h-12 mt-5 rounded-md border w-full border-black/30 bg-transparent px-3 py-3 text-base md:text-xl text-blue-900 font-medium placeholder:text-gray-600 placeholder:text-base md:placeholder:text-xl focus:outline-none"
-                        type="number"
-                        placeholder="No. of Messages to send"
-                        disabled={loading}
-                        max={50}
-                        min={1}
-                        onChange={(e) => {
-                            setData({
-                                ...data,
-                                total: e.target.value,
-                            });
-                        }}
-                        required
-                    />
+                    <div className="relative w-full">
+                        <label
+                            htmlFor="number"
+                            className={`font-medium rounded-md cursor-text text-gray-600 transition-all  absolute  left-0  px-1 mx-2 ${
+                                focus.number
+                                    ? "text-base -top-3.5 backdrop-blur-3xl"
+                                    : "text-xl top-2.5"
+                            }`}
+                        >
+                            Mobile Number
+                        </label>
+                        <input
+                            className=" h-12 rounded-md border w-full border-black/30 bg-transparent px-3 py-3 text-base md:text-xl text-blue-900 font-medium  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-none "
+                            type="number"
+                            id="number"
+                            disabled={loading}
+                            onChange={(e) => {
+                                setData({
+                                    ...data,
+                                    number: e.target.value,
+                                });
+                            }}
+                            onFocus={(e) =>
+                                setFocus((prev) =>
+                                    e.target.value != ""
+                                        ? prev
+                                        : { ...prev, number: true }
+                                )
+                            }
+                            onBlur={(e) =>
+                                setFocus((prev) =>
+                                    e.target.value != ""
+                                        ? prev
+                                        : { ...prev, number: false }
+                                )
+                            }
+                        />
+                    </div>
+
+                    <div className="w-full relative mt-6">
+                        <label
+                            htmlFor="total"
+                            className={`font-medium rounded-md cursor-text text-gray-600 transition-all  absolute  left-0  px-1 mx-2 ${
+                                focus.total
+                                    ? "text-base -top-3.5 backdrop-blur-3xl"
+                                    : "text-xl top-2.5"
+                            }`}
+                        >
+                            No. of Messages to send
+                        </label>
+                        <input
+                            className="flex h-12  rounded-md border w-full border-black/30 bg-transparent px-3 py-3 text-base md:text-xl text-blue-900 font-medium  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-none"
+                            type="number"
+                            id="total"
+                            disabled={loading}
+                            onChange={(e) => {
+                                setData({
+                                    ...data,
+                                    total: e.target.value,
+                                });
+                            }}
+                            onFocus={(e) =>
+                                setFocus((prev) =>
+                                    e.target.value != ""
+                                        ? prev
+                                        : { ...prev, total: true }
+                                )
+                            }
+                            onBlur={(e) =>
+                                setFocus((prev) =>
+                                    e.target.value != ""
+                                        ? prev
+                                        : { ...prev, total: false }
+                                )
+                            }
+                        />
+                    </div>
                     <div className="w-full leading-4 text-sm mt-5 mx-auto bg-red-600/80 px-2 py-1 text-white rounded-md">
                         ⚠️ Please do not use this website for revenge or
                         harassment. Developer is not responsible for your
@@ -119,7 +179,7 @@ export const Home = () => {
 
                     <button
                         type={loading ? "button" : "submit"}
-                        className={`rounded-md bg-blue-500  my-5 px-5 py-2 font-semibold text-white shadow-sm hover:bg-blue-500/70  text-xl`}
+                        className={`rounded-md bg-blue-500  my-5 px-5 py-2 font-semibold text-white   transition-all duration-75 text-xl shadow-[4px_4px_#001221] active:shadow-[0px_0px_rgba(0,0,0,0.3)]`}
                     >
                         {loading ? (
                             <div className="flex items-center space-x-2 cursor-not-allowed">

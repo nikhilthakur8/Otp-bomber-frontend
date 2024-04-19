@@ -26,7 +26,7 @@ export function Navbar() {
     };
 
     return (
-        <div className="w-full  font-mono bg-black/45 sticky top-0">
+        <div className="w-full  font-mono bg-gray-700/45 backdrop-blur-lg sticky top-0">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
                 <div className="inline-flex items-center space-x-2">
                     <span className="font-bold text-2xl">OTP Bomber</span>
