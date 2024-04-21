@@ -95,9 +95,9 @@ export const Home = () => {
                         {...register("total", {
                             required: "Required",
                             min: {
-                                value: 0,
+                                value: 1,
                                 message:
-                                    "Please enter the number of message > 0",
+                                    "Please enter the number of message > 1",
                             },
                             max: {
                                 value: 50,
