@@ -22,7 +22,7 @@ export const Home = () => {
         // Making No. of request to server in chunk of 5 otp per request
 
         let skip = 0;
-        let i = total;
+        let i = data.total;
         // for making request to server in chunk of 5 otp per request
         while (i > 0) {
             if (i < 5) {
@@ -40,7 +40,9 @@ export const Home = () => {
         return new Promise((resolve, reject) => {
             axios
                 .post("/api/v1/bomb", { ...data, total, skip })
-                .then(() => {})
+                .then(({ data }) => {
+                    console.log(data);
+                })
                 .catch(() => {
                     clearInterval(intervalId);
                     setProgress(0);
